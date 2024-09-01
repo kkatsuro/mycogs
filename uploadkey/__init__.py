@@ -1,4 +1,4 @@
-from .uploadssh import uploadssh
+from .uploadkey import uploadkey
 
 def setup(bot):
-    bot.add_cog(uploadssh(bot))
+    bot.add_cog(uploadkey(bot))
