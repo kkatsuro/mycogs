@@ -1,4 +1,4 @@
 from .uploadkey import uploadkey
 
-def setup(bot):
-    bot.add_cog(uploadkey(bot))
+async def setup(bot):
+    await bot.add_cog(uploadkey(bot))

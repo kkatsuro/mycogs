@@ -8,6 +8,7 @@ from redbot.core.commands import Cog
 
 logger = logging.getLogger("red")
 
+
 class uploadkey(Cog):
     """
     about cog
