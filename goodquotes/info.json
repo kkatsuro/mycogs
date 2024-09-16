@@ -1,0 +1,17 @@
+{
+  "author": [
+    "meta"
+  ],
+  "min_bot_version": "3.5.0",
+  "description": "goodquotes!! F4P is For Academic Purposes",
+  "hidden": false,
+  "requirements": [
+    "httpx",
+    "pillow",
+    "numpy"
+  ],
+  "tags": [
+    "utils",
+    "f4p"
+  ]
+}
