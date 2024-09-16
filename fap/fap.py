@@ -105,9 +105,6 @@ class fap(Cog):
         self.cat_cache = {}
         self.loadable_extensions = set(['jpg', 'jpeg', 'png', 'gif', 'webp', 'mp4'])
 
-        if self.bot.is_ready():
-            asyncio.create_task(self.load())
-
 
     # XXX: some checks here?
     async def _fetch_message(self, guildid, channelid, messageid):
