@@ -82,8 +82,6 @@ class fap(Cog):
     def __init__(self, red: Red):
         super().__init__()
         self.bot = red
-        self.lab_channel = None
-        self.fap_guild   = None
 
         # TODO:
         # loading setting - probably do it at start,
@@ -109,13 +107,6 @@ class fap(Cog):
 
         if self.bot.is_ready():
             asyncio.create_task(self.load())
-
-
-    async def load(self):
-        self.fap_guild     = self.bot.get_guild(931149990041108530)
-        self.usoppu_guild  = self.bot.get_guild(962664255189041183)
-        self.lab_channel   =    self.fap_guild.get_channel(993158481429418025)
-        self.u_lab_channel = self.usoppu_guild.get_channel(1047786278105645086)
 
 
     # XXX: some checks here?
