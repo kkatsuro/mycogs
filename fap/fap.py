@@ -641,12 +641,12 @@ class fap(Cog):
 
         category = category.lower()
         if category == 'list':
-            for category in waifu_categories:
+            for category in categories:
                 dprint(category)
             await dsend(ctx.channel)
             return
 
-        if category not in waifu_categories:
+        if category not in categories:
             await ctx.send('unknown category, please use &waifu list')
             return
 
