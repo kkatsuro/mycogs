@@ -705,7 +705,7 @@ class fap(Cog):
                 waifu_url = json.loads(waifu_json_object.content.decode())['url']
             except Exception as e:
                 dprint('error while trying to load waifu:')
-                dprint(f'`{e}`)
+                dprint(f'`{e}`')
                 await dsend(ctx.channel)
                 return
 
