@@ -1,10 +1,6 @@
 ## mycogs
 
-mycogs is collection of redbot plugins i written for our discord server currently porting to 3.5..
-## old description of repo
+mycogs is collection of redbot plugins I written for our discord server (***our****cogs? *Communist-Bugs-Bunny.png*)
 
-didn't bring ssh keys with me but I need ssh access
-
-the plan is to create a cog which appends key from message to .ssh/authorized_keys on command usage
-
-and then to add it
+## development process
+I use `build.py` script from reloading cogs. My nvim is set to execute build.* scripts from directory of current project. In every project I simply put new `build.py` and change the cogname. Project directory is linked to redbot cogs path. In my right terminal pane, I run redbot with `--rpc` flag, so after pressing reload hotkey, I immediately see all the tracebacks if there are any.
