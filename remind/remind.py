@@ -66,8 +66,7 @@ class remind(Cog):
 
     async def send_reminder(self, channel, user, thing, timestamp):
         await asyncio.sleep(timestamp - time.time())
-        await channel.send(f'Hey, {user.mention}!')
-        await channel.send(f'Remember to {thing}, you bastard {DISGUST}')
+        await channel.send(f'Hey, {user.mention}! Remember to {thing}, you bastard {DISGUST}')
 
         async with self.config.saved_dates() as dates:
             del dates[str(timestamp)]
