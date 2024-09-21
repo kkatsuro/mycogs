@@ -124,4 +124,4 @@ class remind(Cog):
         duration = humanize.naturaldelta(delta).replace(' ', '-')
         if duration.startswith('a-'):
             duration.replace('a', '1', 1)
-        await ctx.send(f'Initiating a {duration} time leap. See ya soon, you bastards. {DISGUST}')
+        await ctx.send(f'Initiating a {duration} time leap. See ya soon, bastards. {DISGUST}')
