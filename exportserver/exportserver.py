@@ -33,7 +33,7 @@ class exportserver(Cog):
         logger.info('== loaded exportserver ==')
 
 
-    async def savechannel(self, channel, root_directory):
+    async def savechannel(self, channel, root_directory, limit=None):
         directory = f'{root_directory}/{channel.id}'
         attachments_directory = f'{directory}/attachments'
         os.mkdir(directory)
@@ -44,7 +44,7 @@ class exportserver(Cog):
         i = 1
 
         messages = []
-        async for message in channel.history(limit=None):
+        async for message in channel.history(limit=limit):
             if i % 937 == 0:  # some random number for logs
                 logger.info(f'{channel.id} -- message {i}')
             i += 1
@@ -75,7 +75,7 @@ class exportserver(Cog):
 
 
     @commands.command()
-    async def saveguild(self, ctx):
+    async def saveguild(self, ctx, limit=None):
         dirname = f'/tmp/guild-{ctx.guild.id}'
         await ctx.send(f'saving guild!')
         try:
@@ -94,7 +94,7 @@ class exportserver(Cog):
                 continue
 
             try:
-                await self.savechannel(channel, dirname)
+                await self.savechannel(channel, dirname, limit)
                 await ctx.send(f'saved channel {channel.name} -- {channel.id}')
             except Exception as e:
                 await ctx.send(f'error saving channel {channel.name}: {e}')
