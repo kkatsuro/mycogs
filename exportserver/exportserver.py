@@ -75,7 +75,7 @@ class exportserver(Cog):
 
 
     @commands.command()
-    async def saveguild(self, ctx, limit=None):
+    async def saveguild(self, ctx, limit=None: int):
         dirname = f'/tmp/guild-{ctx.guild.id}'
         await ctx.send(f'saving guild!')
         try:
