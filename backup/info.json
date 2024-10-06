@@ -1,0 +1,13 @@
+{
+  "author": [
+    "meta"
+  ],
+  "min_bot_version": "3.5.0",
+  "description": "archives whole (almost) discord server",
+  "hidden": false,
+  "short": "cog",
+  "tags": [
+    "utils",
+    "f4p"
+  ]
+}
