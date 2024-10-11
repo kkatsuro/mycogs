@@ -17,6 +17,23 @@ from datetime import datetime
 
 logger = logging.getLogger("red")
 
+
+# directory structure is (will be.. after I do link creation, @todo):
+# backup-dir/
+# | - guild1-id/
+# |   | - channel-id1/
+# |   |   | - messages.log
+# |   |   | - attachments/
+# |   |
+# |   | - channel-id2/
+# |       | - messages.log
+# |       | - attachments/
+# |
+# | - guild1-name/
+#     | - link-to-channel-id1-with-name
+#     | - link-to-channel-id2-with-name
+
+
 class backup(Cog):
     """
     backup everything!!
@@ -46,9 +63,6 @@ class backup(Cog):
     async def cog_unload(self):
         for task in self.backup_tasks.values():
             task.cancel()
-
-    # saving - do a separate directory tree, original one is all IDs of servers and channels,
-    # second one is links, named like channels are named
 
     @commands.group()
     async def backup(self, ctx):
@@ -82,29 +96,43 @@ class backup(Cog):
             # @todo: stop task too, both perform_backup and self.watched_channels.dicard(id)
         await ctx.send('Backup enabled again')
 
+    @commands.command()
+    async def embed_details(self, ctx, message_id=None):
+        if message_id is None:
+            message_id = 1292423726905823264
+        message = await ctx.channel.fetch_message(message_id)
+        await ctx.send(str(message.embeds[0].to_dict()))
+        # await ctx.send(str(message.content))
+
 
     async def save_message(self, message):
+        channel_directory = f'{self.backup_directory}/{message.guild.id}/{message.channel.id}'
+
         message_dict = {
             'id': message.id,
             'author': message.author.id,
             'date': str(message.created_at)
         }
 
-        # message.embeds  @todo
+        if message.embeds:
+            embeds = [ embed.to_dict() for embed in message.embeds ]
+            message_dict['embeds'] = embeds
 
         if message.content:
             message_dict['content'] = message.content
 
         if message.attachments:
-            message_dict['attachments'] = [ file.filename for file in message.attachments ]
-            # for file in message.attachments:  @todo!
-            #     asyncio.create_task(file.save(f'{attachments_directory}/{message.id}-{file.filename}'))
+            message_dict['attachments'] = []
+            for file in message.attachments:
+                filename = f'{message.id}-{file.filename}'
+                asyncio.create_task(file.save(f'{channel_directory}/attachments/{filename}'))
+                message_dict['attachments'].append(filename)
 
         if message.reference:
             message_dict['reference'] = message.reference.message_id
 
-        filename = f'{self.backup_directory}/{message.guild.id}/{message.channel.id}/messages.log'
-        with open(filename, 'a') as f:
+        logfile = f'{channel_directory}/messages.log'
+        with open(logfile, 'a') as f:
             f.write(f'{message.created_at.timestamp()} {json.dumps(message_dict)}\n')
 
 
@@ -116,7 +144,6 @@ class backup(Cog):
         Looks like permissions are not really reliable,
         so I try to download one message to see if bot actually has permission
         '''
-
         if not isinstance(channel, discord.TextChannel):
             return
 
@@ -126,13 +153,15 @@ class backup(Cog):
         except discord.Forbidden:
             return
 
+        logger.info(f'Starting perform_backup({channel.name})')
+
         try:
-            directory = f'{self.backup_directory}/{channel.guild.id}/{channel.id}'
-            messages = f'{directory}/messages.log'
+            channel_dir = f'{self.backup_directory}/{channel.guild.id}/{channel.id}'
+            messages_file = f'{channel_dir}/messages.log'
 
             # load date of last message
-            if os.path.isfile(messages):
-                with open(messages) as f:
+            if os.path.isfile(messages_file):
+                with open(messages_file) as f:
                     # seek near the end of file.. some files will be veeeery big, dont wonna load those
                     # I sent a message full of 4bytes unicode character and clength of the line was 12132 characters,
                     # so I will do 64k here for no good reason other than it's few times bigger
@@ -151,9 +180,16 @@ class backup(Cog):
                         logger.info(f'Error while parsing date from last message: {e}; lastline is: {lastline}')
                         last_message_date = None
             else:
-                if not os.path.isdir(directory):
-                    os.makedirs(directory)
                 last_message_date = None
+
+            attachments_dir = f'{channel_dir}/attachments'
+            if not os.path.isdir(attachments_dir):
+                os.makedirs(attachments_dir)
+
+            # it gets saved here, so we can later use some script which will create links to channels
+            # with channel names, instead of ids
+            with open(f'{channel_dir}/channel_name.log', 'w') as f:
+                f.write(channel.name)
 
             async for message in channel.history(limit=None, oldest_first=True, after=last_message_date):
                 await self.save_message(message)
@@ -161,7 +197,7 @@ class backup(Cog):
             self.watched_channels.add(channel.id)
 
         except Exception as e:
-            logger.info(f'Error in perform_backup({channel.id}): {e}')
+            logger.info(f'Error in perform_backup({channel.name}): {e}')
 
 
     @commands.Cog.listener()
