@@ -1,12 +1,14 @@
 import asyncio
 import discord
+import logging
 
-from discord.errors import NotFound
+from discord.errors import InvalidArgument, NotFound
 
 # @todo: its possible a lock is necessary on this..
 webhooks_dict = dict()
 
 # @todo: this should actually be completely rewritten!!! and add webhook avatar change once it changes
+# @todo: check if bot has permission to manage webhooks before sending
 
 # webhooks is:
 # {
@@ -21,6 +23,7 @@ webhooks_dict = dict()
 #
 # }
 
+logger = logging.getLogger("red")
 
 # @todo: also, this looks like something which can cause many issues
 def webhooks_loaded(guild, channel):
@@ -45,7 +48,8 @@ async def webhook_send(ctx, channel, user, message=None, file=None, embed=None, 
     try:
         message = await webhook.send(content=message, file=file, embed=embed,
                                      username=user.display_name, wait=wait)
-    except NotFound:  # if for some reason webhook was deleted or has no token
+    except (InvalidArgument, NotFound, AttributeError) as e:  # if for some reason webhook was deleted or has no token
+        logger
         webhook = await webhook_create(ctx.guild, channel, user)
         message = await webhook.send(content=message, file=file, embed=embed,
                                      username=user.display_name, wait=wait)
