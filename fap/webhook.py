@@ -59,7 +59,7 @@ async def webhook_send(ctx, channel, user, message=None, file=None, embed=None, 
 
 # @todo: webhook limit in current channel
 async def webhook_create(guild, channel, user):
-    avatar = await user.avatar_url_as().read()  # returns bytes object
+    avatar = await user.display_avatar.read()  # returns bytes object
     webhook = await channel.create_webhook(name=user.id, avatar=avatar)
     webhooks_dict[guild.id][channel.id][str(user.id)] = webhook
     return webhook
