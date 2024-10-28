@@ -49,7 +49,7 @@ async def webhook_send(ctx, channel, user, message=None, file=None, embed=None, 
         message = await webhook.send(content=message, file=file, embed=embed,
                                      username=user.display_name, wait=wait)
     except (NotFound, AttributeError) as e:  # if for some reason webhook was deleted or has no token
-        logger(f'Except in webhook send: {e}')
+        logger.info(f'Except in webhook send: {e}')
         webhook = await webhook_create(ctx.guild, channel, user)
         message = await webhook.send(content=message, file=file, embed=embed,
                                      username=user.display_name, wait=wait)
