@@ -45,15 +45,24 @@ async def webhook_send(ctx, channel, user, message=None, file=None, embed=None, 
     if webhook == None:
         webhook = await webhook_create(ctx.guild, channel, user)
 
+    # looks like someone came up with a *great* idea of switching all the `None` default args in
+    # methods, to custom variable which is called 'MISSING'
+    # after update to discord.py 2.0, webhook.send, to which I passed file=None when I didnt want to send it,
+    # stopped working.. so thats my idea how to solve it
+    arguments_dict = {}
+    if message:
+        arguments_dict['content'] = message
+    if file:
+        arguments_dict['file'] = file
+    if embed:
+        arguments_dict['embed'] = embed
+
     try:
-        logger.info(f'webhook.send(content={message}, file={file}, embed={embed}, username={user.display_name}, wait={wait})')
-        message = await webhook.send(content=message, file=file, embed=embed,
-                                     username=user.display_name, wait=wait)
+        message = await webhook.send(**arguments_dict, username=user.display_name, wait=wait)
     except (NotFound, AttributeError) as e:  # if for some reason webhook was deleted or has no token
         logger.info(f'Except in webhook send: {e}')
         webhook = await webhook_create(ctx.guild, channel, user)
-        message = await webhook.send(content=message, file=file, embed=embed,
-                                     username=user.display_name, wait=wait)
+        message = await webhook.send(**arguments_dict, username=user.display_name, wait=wait)
 
     return message
 
