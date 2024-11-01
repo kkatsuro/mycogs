@@ -62,7 +62,7 @@ class cognition(Cog):
             },
             {
               "role": "user",
-              "content": question
+              "content": 'tellme ' + question
             }
           ],
           "model": "grok-beta",
