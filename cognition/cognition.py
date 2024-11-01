@@ -38,6 +38,11 @@ class cognition(Cog):
         await self.config.guild(ctx.guild).prompt.set(prompt)
         await ctx.send("its set now")
 
+    @commands.guild_only()
+    @commands.command()
+    async def show_prompt(self, ctx, *, prompt):
+        await ctx.send(await self.config.guild(ctx.guild).prompt())
+
     @commands.command()
     async def tellme(self, ctx, *, question):
         tokens = await self.bot.get_shared_api_tokens()
