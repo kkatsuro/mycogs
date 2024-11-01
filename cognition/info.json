@@ -1,0 +1,13 @@
+{
+  "author": [
+    "meta"
+  ],
+  "min_bot_version": "3.5.0",
+  "description": "cognition - make your redbot instance sentient",
+  "hidden": false,
+  "requirements": ["humanize"],
+  "tags": [
+    "utils",
+    "f4p"
+  ]
+}
