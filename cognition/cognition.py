@@ -24,6 +24,7 @@ class cognition(Cog):
         self.bot = red
 
         self.config = Config.get_conf(self, identifier=1234567890)
+        self.config.register_global(prompt='')
         self.config.register_guild(prompt='')
 
     async def cog_load(self):
@@ -50,7 +51,11 @@ class cognition(Cog):
         if not grokkey:
             return await ctx.send('no token, set ur grokai api token with $set api grokai grokai *ur_token_here*')
 
-        prompt = await self.config.guild(ctx.guild).prompt()
+        try:
+            prompt = await self.config.guild(ctx.guild).prompt()
+        except AttributeError:
+            prompt = await self.config.prompt()
+
         if not prompt:
             return await ctx.send('prompt not set, set ur prompt $set_prompt')
 
@@ -83,7 +88,7 @@ class cognition(Cog):
 
         if not (200 <= response.status_code <= 299):
             return await ctx.send(f'looks like there an issue, talk to administrator k? status code: {response.status_code}')
-            
+
         response = response.json()
 
         logger.info(f'cognition usage - {response["usage"]}')
