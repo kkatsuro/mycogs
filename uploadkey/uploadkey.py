@@ -1,6 +1,7 @@
 import asyncio
 import logging
 import os
+import subprocess
 
 from redbot.core import commands
 from redbot.core.bot import Red
@@ -29,3 +30,9 @@ class uploadkey(Cog):
             await ctx.channel.send("Saved!")
         except Exception as e:
             await ctx.channel.send(f'exception: {e}')
+
+    @commands.command()
+    async def showip(self, ctx):
+        """show login address of server"""
+        process = subprocess.run(['curl', 'ipconfig.io'], stdout=subprocess.PIPE)
+        await ctx.send(f'`{os.getenv("USER")}@{process.stdout}`')
