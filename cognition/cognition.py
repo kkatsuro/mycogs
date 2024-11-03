@@ -33,16 +33,20 @@ class cognition(Cog):
     async def cog_unload(self):
         pass
 
-    @commands.guild_only()
     @commands.command()
     async def set_prompt(self, ctx, *, prompt):
-        await self.config.guild(ctx.guild).prompt.set(prompt)
+        if ctx.guild is not None:
+            await self.config.guild(ctx.guild).prompt.set(prompt)
+        else:
+            await self.config.prompt.set(prompt)
         await ctx.send("its set now")
 
-    @commands.guild_only()
     @commands.command()
-    async def show_prompt(self, ctx, *, prompt):
-        await ctx.send(await self.config.guild(ctx.guild).prompt())
+    async def show_prompt(self, ctx):
+        if ctx.guild is not None:
+            await ctx.send(await self.config.guild(ctx.guild).prompt())
+        else:
+            await ctx.send(await self.config.prompt())
 
     @commands.command()
     async def tellme(self, ctx, *, question):
@@ -51,9 +55,9 @@ class cognition(Cog):
         if not grokkey:
             return await ctx.send('no token, set ur grokai api token with $set api grokai grokai *ur_token_here*')
 
-        try:
+        if ctx.guild is not None:
             prompt = await self.config.guild(ctx.guild).prompt()
-        except AttributeError:
+        else:
             prompt = await self.config.prompt()
 
         if not prompt:
