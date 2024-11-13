@@ -97,7 +97,10 @@ class cognition(Cog):
 
         logger.info(f'cognition usage - {response["usage"]}')
 
-        await ctx.send(response['choices'][0]['message']['content'])
+        output = response['choices'][0]['message']['content']
+        while len(output>2000):  # @todo: write and use some new generalized funcion for sending longer messages here, like in buffer.py
+            await ctx.send(output[:2000])
+            output = output[2000:]
 
         if len(response['choices']) > 1:
             logger.info(response)
