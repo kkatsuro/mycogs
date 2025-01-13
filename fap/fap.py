@@ -61,13 +61,6 @@ async def _check_channel_permissions(ctx, channel: discord.TextChannel):
     return True
 
 
-CRAZY = """𝘪 𝘸𝘢𝘴 𝘤𝘳𝘢𝘻𝘺 𝘰𝘯𝘤𝘦
-𝘵𝘩𝘦𝘺 𝘭𝘰𝘤𝘬𝘦𝘥 𝘮𝘦 𝘪𝘯 𝘢 𝘳𝘰𝘰𝘮
-𝘢 𝘳𝘶𝘣𝘣𝘦𝘳 𝘳𝘰𝘰𝘮
-𝘢 𝘳𝘶𝘣𝘣𝘦𝘳 𝘳𝘰𝘰𝘮 𝘸𝘪𝘵𝘩 𝘳𝘢𝘵𝘴
-𝘢𝘯𝘥 𝘵𝘩𝘦𝘺 𝘮𝘢𝘥𝘦 𝘮𝘦 𝘤𝘳𝘢𝘻𝘺
-𝘤𝘳𝘢𝘻𝘺 ?\n"""
-
 # @todo: this will have to be linked to guild somehow..
 DISGUST = '<:kurumDisgust:973260944593530991>'
 STARE = '<:kurumStare:973260945260433408>'
@@ -210,12 +203,21 @@ class fap(Cog):
 
 
     @commands.command(name='crazy')
-    async def fap_crazy(self, ctx):
+    async def fap_crazy(self, ctx, how_much_crazy: Optional[int] = 10):
         """I was crazy once"""
-        global CRAZY
-        dprint('𝘤𝘳𝘢𝘻𝘺 ?')
-        dprint(CRAZY * 10)
-        await ctx.send(buffempty())
+        
+        crazy = """𝘪 𝘸𝘢𝘴 𝘤𝘳𝘢𝘻𝘺 𝘰𝘯𝘤𝘦
+        𝘵𝘩𝘦𝘺 𝘭𝘰𝘤𝘬𝘦𝘥 𝘮𝘦 𝘪𝘯 𝘢 𝘳𝘰𝘰𝘮
+        𝘢 𝘳𝘶𝘣𝘣𝘦𝘳 𝘳𝘰𝘰𝘮
+        𝘢 𝘳𝘶𝘣𝘣𝘦𝘳 𝘳𝘰𝘰𝘮 𝘸𝘪𝘵𝘩 𝘳𝘢𝘵𝘴
+        𝘢𝘯𝘥 𝘵𝘩𝘦𝘺 𝘮𝘢𝘥𝘦 𝘮𝘦 𝘤𝘳𝘢𝘻𝘺
+        𝘤𝘳𝘢𝘻𝘺 ?""".splitlines()
+      
+        await ctx.send('𝘤𝘳𝘢𝘻𝘺 ?')
+        for _ in range(how_much_crazy):
+            for line in crazy:
+                await asyncio.sleep(0.1)
+                await ctx.send(line)
 
 
     @commands.command(name='insult')
