@@ -216,7 +216,7 @@ class fap(Cog):
         await ctx.send('𝘤𝘳𝘢𝘻𝘺 ?')
         for _ in range(how_much_crazy):
             for line in crazy:
-                await asyncio.sleep(0.1)
+                await asyncio.sleep(1)
                 await ctx.send(line)
 
 
