@@ -40,9 +40,9 @@ def create_reply_embed(msg, link, author_in_title=True):
                               url=link, type='rich')
 
     if not author_in_title:
-        embed.set_author(name=msg.author.display_name, icon_url=msg.author.avatar_url)
+        embed.set_author(name=msg.author.display_name, icon_url=msg.author.avatar.url)
     else:
-        embed.set_thumbnail(url=msg.author.avatar_url)
+        embed.set_thumbnail(url=msg.author.avatar.url)
 
     if len(msg.attachments) > 0:
         embed.set_image(url=msg.attachments[0].url)
