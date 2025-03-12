@@ -1,0 +1,15 @@
+{
+  "author": [
+    "me"
+  ],
+  "min_bot_version": "3.5.0",
+  "description": "this is cog",
+  "hidden": false,
+  "install_msg": "nothing",
+  "requirements": [ "yt-dlp" ],
+  "short": "cog",
+  "end_user_data_statement": "none",
+  "tags": [
+    "utils"
+  ]
+}
